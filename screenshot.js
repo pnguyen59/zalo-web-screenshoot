@@ -213,10 +213,13 @@ function addHLtoArray(){
 }
 
 function updateButton(x,y) {
+    // if(clipRect1.width+34 >= window.screen.width){
+    //      $('#toolBar').css({'left':clipRect1.left-34, 'top':y, 'display':'flex'});
+    // }
     if(x+34 >= window.screen.width){
-        $('#toolBar').css({'left':clipRect1.left-34, 'top':y, 'display':'inline'});
+        $('#toolBar').css({'left':clipRect1.left-34, 'top':y, 'display':'block'});
     }else{
-        $('#toolBar').css({'left':x, 'top':y, 'display':'inline'});
+        $('#toolBar').css({'left':x, 'top':y, 'display':'block'});
     }
     checkButton();
 }

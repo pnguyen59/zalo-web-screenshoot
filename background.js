@@ -21,7 +21,7 @@ chrome.runtime.onMessage.addListener(
 });
 
 chrome.browserAction.onClicked.addListener(function() {
-  startStream();
+  //startStream();
   chrome.desktopCapture.chooseDesktopMedia(["screen","window"], startStream);
 });
 

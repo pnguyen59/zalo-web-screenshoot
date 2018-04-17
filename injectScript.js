@@ -4,8 +4,8 @@ function foo(mutationlist){
 	console.log(mutationlist.length);
 	for(var i =0; i<mutationlist.length ; i++){
 		if(mutationlist[i].target.id =='chatView'){
-			 var x = mutationlist[i].target.querySelector("div#chatInputTools");
-			 console.log(x);
+			 var x = mutationlist[i].target.querySelector(".btn.fa.fa-capture-zalo.capture-icon ");
+			 console.dir(x);
 			 x.addEventListener('click',function(){
 		 		chrome.runtime.sendMessage({greeting: 'hello'},function(response){
 		 		console.log(response.farewell);
@@ -14,14 +14,6 @@ function foo(mutationlist){
 			 break;
 		}
 	}
-	// mutationlist.forEach(function(mutation){
-	// 	if(mutation.target.id =='chatView'){
-	// 	 var x = mutation.target.querySelector("div#chatInputTools");
-	// 	 console.dir(x);
-		 
-	// 	 break;
-	// 	}
-	// });
 }
 
 
