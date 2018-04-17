@@ -1,0 +1,30 @@
+{
+  "name": "Test Screenshot Extension",
+  "version": "1.3",
+  "description": "Demonstrate screenshot functionality in the chrome.tabs api.",
+  "background": {
+    "persistent": true,
+    "page": "background.html"
+  },
+  "browser_action": {
+    "default_icon": "camera.png",
+    "default_title": "Take a screen shot!"
+  },
+  "permissions": [
+    "tabs",
+    "activeTab",
+	  "desktopCapture",
+     "<all_urls>",
+     "notifications" ,
+     "clipboardWrite",
+     "clipboardRead",
+     "downloads" 
+  ],
+  "manifest_version": 2,
+  "content_scripts": [
+    {
+    "js": ["injectScript.js"],
+    "matches": ["https://chat.zalo.me/*"]
+    }
+  ]
+}

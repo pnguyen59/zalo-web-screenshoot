@@ -1,0 +1,95 @@
+<html>
+<!-- <script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>
+<script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script> -->
+<video id='video'></video>
+<canvas id='canvas'></canvas>
+<script>
+var id=100;
+  var canvas = document.getElementById('canvas');
+  var ctx = canvas.getContext('2d');
+  var localMediaStream = null;
+  var url;
+  function snapshot() {
+    if (localMediaStream) {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      ctx.drawImage(video, 0, 0);
+      url = canvas.toDataURL('image/webp');
+      localMediaStream.getTracks()[0].stop();
+      showResult(url);
+    }
+  }
+var screen_constraints = {
+    mandatory: {
+        chromeMediaSource: 'desktop',
+        maxWidth: 1920,
+        maxHeight: 1080,
+        minAspectRatio: 1.77
+    },
+    optional: []
+};
+
+var session = {
+    audio: false,
+    video: screen_constraints
+};
+
+navigator.webkitGetUserMedia(session,function(stream){
+	var video = document.getElementById('video');
+         video.srcObject = stream;
+         //chrome.notifications.getAll(function(e){
+          console.log(e);
+         })
+         video.onloadedmetadata = function(e) {
+           //video.play();
+           console.log(stream.getTracks())
+           setTimeout(snapshot,50);
+         };
+         video.play();
+} ,function(err) {
+         console.log("The following error occurred: " + err.name);
+      } );
+
+
+
+function showResult(screenshotUrl){
+    var viewTabUrl = chrome.extension.getURL('edit.html?id=' + id++)
+    var targetId = null;
+
+    chrome.tabs.onUpdated.addListener(function listener(tabId, changedProps) {
+      // We are waiting for the tab we opened to finish loading.
+      // Check that the tab's id matches the tab we opened,
+      // and that the tab is done loading.
+      if (tabId != targetId || changedProps.status != "complete")
+        return;
+
+      // Passing the above test means this is the event we were waiting for.
+      // There is nothing we need to do for future onUpdated events, so we
+      // use removeListner to stop getting called when onUpdated events fire.
+      chrome.tabs.onUpdated.removeListener(listener);
+
+      // Look through all views to find the window which will display
+      // the screenshot.  The url of the tab which will display the
+      // screenshot includes a query parameter with a unique id, which
+      // ensures that exactly one view will have the matching URL.
+      var views = chrome.extension.getViews();
+      for (var i = 0; i < views.length; i++) {
+        var view = views[i];
+        if (view.location.href == viewTabUrl) {
+          view.setScreenshotUrl(screenshotUrl);
+          break;
+        }
+      }
+    });
+
+    chrome.tabs.create({url: viewTabUrl}, function(tab) {
+      targetId = tab.id;
+      chrome.windows.create({tabId: targetId,
+        state: 'fullscreen'})
+    });
+
+    
+}
+
+</script>
+</html>
